@@ -15,9 +15,9 @@
 
 Route::get('/', 'PagesController@index')->name('home');
 
-Route::get('about', 'PagesController@about');
+Route::get('/about', 'PagesController@about');
 
-Route::get('contact', 'PagesController@contact');
+Route::get('/contact', 'PagesController@contact');
 
 // messages
 
@@ -36,3 +36,17 @@ Auth::routes();
 //posts
 
 Route::resource('posts', 'PostsController');
+
+// categories
+
+Route::get('/categories', 'CategoriesController@allCategories')->name('all.categories');
+
+Route::post('/categories', 'CategoriesController@storeCategory')->name('store.category');
+
+Route::get('/categories/{id}', 'CategoriesController@showCategory')->name('show.category');
+
+Route::get('/categories/{id}/edit', 'CategoriesController@editCategory')->name('edit.category');
+
+Route::put('/categories/{id}', 'CategoriesController@updateCategory')->name('update.category');
+
+Route::delete('/categories/{id}', 'CategoriesController@deleteCategory')->name('delete.category');

@@ -9,6 +9,10 @@ use Session;
 class MessagesController extends Controller
 {
 
+  public function __construct() {
+    $this->middleware('auth',['except'=>'storeMessages']);
+  }
+
   public function allMessages() {
 
     $messages = Message::orderBy('id', 'desc')->get();

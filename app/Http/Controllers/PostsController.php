@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
+use Auth;
 use Session;
 
 class PostsController extends Controller
 {
+    public function __construct() {
+      $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +32,9 @@ class PostsController extends Controller
      */
     public function create()
     {
-      return view('posts.create');
+      $categories = Category::pluck('category_name','id');
+
+      return view('posts.create')->withCategories($categories);
     }
 
     /**
@@ -39,14 +46,17 @@ class PostsController extends Controller
     public function store(Request $request)
     {
       $this->validate($request,[
-        'title' => 'required|max:255|unique:posts',
-        'body'  => 'required'
+        'title'       => 'required|max:255|unique:posts',
+        'category_id' => 'required|integer',
+        'body'        => 'required'
       ]);
 
       $post = new Post;
 
       $post->title = $request->title;
+      $post->category_id = $request->category_id;
       $post->body = $request->body;
+      $post->user_id = Auth::user()->id;
 
       $post->save();
 
@@ -78,7 +88,23 @@ class PostsController extends Controller
     {
       $post = Post::find($id);
 
-      return view('posts.edit')->withPost($post);
+      if ( $post->user_id !== Auth::user()->id )
+
+      {
+        Session::flash('danger', 'you are not authorized to edit this post !');
+
+        return redirect()->route('posts.index');
+      }
+
+      if ($post->category_id == null) {
+
+        Session::flash('danger', 'This post does not have any category yet, please choose one !');
+        
+      }
+
+      $categories = Category::pluck('category_name', 'id');
+
+      return view('posts.edit')->withPost($post)->withCategories($categories);
     }
 
     /**
@@ -92,12 +118,14 @@ class PostsController extends Controller
     {
       $this->validate($request,[
         'title' => 'required|max:255',
+        'category_id' => 'required|integer',
         'body'  => 'required'
       ]);
 
       $post = Post::find($id);
 
       $post->title = $request->title;
+      $post->category_id = $request->category_id;
       $post->body = $request->body;
 
       $post->save();
@@ -116,6 +144,14 @@ class PostsController extends Controller
     public function destroy($id)
     {
       $post = Post::find($id);
+
+      if ( $post->user_id !== Auth::user()->id )
+
+      {
+        Session::flash('danger', 'you are not authorized to edit this post !');
+
+        return redirect()->route('posts.index');
+      }
 
       $post->delete();
 

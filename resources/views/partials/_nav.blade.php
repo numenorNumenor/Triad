@@ -37,6 +37,7 @@
 
                   <ul class="dropdown-menu" role="menu">
                       <li class="{{ Request::is("messages") ? "active" : "" }}"><a href="/messages">Messages</a></li>
+                      <li class="{{ Request::is("categories") ? "active" : "" }}"><a href="/categories">Categories</a></li>
                       <li class="{{ Request::is("posts") ? "active" : "" }}"><a href="/posts">Posts</a></li>
                       <li class="{{ Request::is("posts/create") ? "active" : "" }}"><a href="/posts/create">Create post</a></li>
                       <li>

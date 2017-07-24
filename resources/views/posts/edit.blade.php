@@ -16,11 +16,15 @@
           {{ Form::text('title', null, array('class' => 'form-control')) }}
         </div>
         <div class="form-group">
+          {{ Form::label('category_id', 'Category :') }}
+          {{ Form::select('category_id', $categories,null, array('class' => 'form-control')) }}
+        </div>        
+        <div class="form-group">
           {{ Form::label('body', 'Post body :') }}
           {{ Form::textarea('body', null, array('class' => 'form-control')) }}
         </div>
         <div class="btn-group">
-          {{ Form::submit('Send', array('class' => 'btn btn-success btn-lg')) }}
+          {{ Form::submit('Edit', array('class' => 'btn btn-success btn-lg')) }}
         </div>
       {!! Form::close() !!}
     </div>
