@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdToPosts extends Migration
+class AddSlugToPosts extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddUserIdToPosts extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-          $table->integer('user_id')->nullable()->unsigned();
+          $table->string('slug')->unique();
         });
     }
 
@@ -26,7 +26,7 @@ class AddUserIdToPosts extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-          $table->dropColumn('user_id');
+          $table->dropColumn('slug');
         });
     }
 }

@@ -33,7 +33,7 @@ Route::delete('/messages/{id}', 'MessagesController@deleteMessage')->name('delet
 
 Auth::routes();
 
-//posts
+//back-end-posts
 
 Route::resource('posts', 'PostsController');
 
@@ -50,3 +50,9 @@ Route::get('/categories/{id}/edit', 'CategoriesController@editCategory')->name('
 Route::put('/categories/{id}', 'CategoriesController@updateCategory')->name('update.category');
 
 Route::delete('/categories/{id}', 'CategoriesController@deleteCategory')->name('delete.category');
+
+// front-end-blogs
+
+Route::get('blog/{slug}', ['as' => 'blog.post', 'uses' => 'BlogsController@post'])->where('slug', '[\w\d\-\_]+');
+
+Route::get('blog', 'BlogsController@index');

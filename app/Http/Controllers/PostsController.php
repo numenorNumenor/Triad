@@ -34,6 +34,10 @@ class PostsController extends Controller
     {
       $categories = Category::pluck('category_name','id');
 
+      if (count($categories) <= 0) {
+        Session::flash('danger', 'There have not been any category created yet. Firstly create category then post.');
+      }
+
       return view('posts.create')->withCategories($categories);
     }
 
@@ -47,6 +51,7 @@ class PostsController extends Controller
     {
       $this->validate($request,[
         'title'       => 'required|max:255|unique:posts',
+        'slug'        => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
         'category_id' => 'required|integer',
         'body'        => 'required'
       ]);
@@ -54,6 +59,7 @@ class PostsController extends Controller
       $post = new Post;
 
       $post->title = $request->title;
+      $post->slug = $request->slug;
       $post->category_id = $request->category_id;
       $post->body = $request->body;
       $post->user_id = Auth::user()->id;
@@ -99,7 +105,7 @@ class PostsController extends Controller
       if ($post->category_id == null) {
 
         Session::flash('danger', 'This post does not have any category yet, please choose one !');
-        
+
       }
 
       $categories = Category::pluck('category_name', 'id');
@@ -117,14 +123,16 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
       $this->validate($request,[
-        'title' => 'required|max:255',
+        'title'       => 'required|max:255',
+        'slug'        => 'required|alpha_dash|min:5|max:255',
         'category_id' => 'required|integer',
-        'body'  => 'required'
+        'body'        => 'required'
       ]);
 
       $post = Post::find($id);
 
       $post->title = $request->title;
+      $post->slug = $request->slug;
       $post->category_id = $request->category_id;
       $post->body = $request->body;
 

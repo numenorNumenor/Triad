@@ -7,7 +7,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <a class="btn btn-success btn-lg" href="{{ url('posts') }}">Back to posts</a>
+      <a class="btn btn-success btn-lg" href="{{ url('/blog') }}">Back to blog posts</a>
 
       <div class="page-header">
         <h1 class="text-center">
